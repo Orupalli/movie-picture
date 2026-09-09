@@ -1,29 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function MovieList({ onMovieClick }) {
+const MovieList = ({ onMovieClick }) => {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_MOVIE_API_URL}/movies`).then((response) => {
-      setMovies(response.data.movies);
-    });
+    axios
+      .get(`${process.env.REACT_APP_MOVIE_API_URL}/movies`)
+      .then((response) => {
+        setMovies(response.data.movies || response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
 
-  return (
-    <ul>
-      {movies.map((movie) => (
-        <li className="movieItem" key={movie.id} onClick={() => onMovieClick(movie)}>
-          {movie.title}
-        </li>
-      ))}
-    </ul>
-  );
-}
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-MovieList.propTypes = {
-  onMovieClick: PropTypes.func.isRequired,
+  return (
+    <div className="movie-list">
+      {movies.map((movie) => (
+        <div key={movie.id} onClick={() => onMovieClick(movie)} className="movie-item">
+          {movie.title}
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default MovieList;
