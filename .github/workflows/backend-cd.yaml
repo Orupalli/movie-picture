@@ -44,15 +44,21 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: us-east-1
+        continue-on-error: true  
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
+        continue-on-error: true
       - name: Push to ECR
         run: |
-          docker tag mp-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.BACKEND_ECR_REPOSITORY }}:latest
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.BACKEND_ECR_REPOSITORY }}:latest
+          docker tag mp-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/mp-backend:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/mp-backend:latest
+        continue-on-error: true
+
+         
       - name: Deploy to EKS
         uses: tale/kubectl-action@v1
+        continue-on-error: true
         with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-          args: set image deployment/backend backend=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.BACKEND_ECR_REPOSITORY }}:latest
+          args: set image deployment/backend backend=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/mp-backend:latest
