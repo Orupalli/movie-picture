@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import movieList from './components/movieList';
-import movieDetails from './components/movieDetails';
+import MovieList from './components/MovieList';
+import MovieDetails from './components/MovieDetails';
 import './App.css';
 
 export default function App() {
