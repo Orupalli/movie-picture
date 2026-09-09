@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const MovieDetails = ({ movie }) => {
   const [details, setDetails] = useState(null);
@@ -15,7 +15,7 @@ const MovieDetails = ({ movie }) => {
         setDetails(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching movie details:", error);
+        console.error('Error fetching movie details:', error);
       });
   }, [movie]);
 
