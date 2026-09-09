@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build docker
-        run: docker build -t mp-backend:latest./starter/backend
+        run: docker build -t mp-backend:latest ./starter/backend
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
